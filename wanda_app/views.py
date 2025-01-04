@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
-from .models import Author, Submission
+from .models import Author, Submission, SubmissionStatus
 from .serializers import RegisterSerializer, SubmissionSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -28,7 +28,7 @@ class RegisterView(APIView):
             # Access the related User object
             user = author.user
             print("THe USER IS : ", user)
-            group = Group.objects.get(name='admin')  # Ensure the group exists
+            group = Group.objects.get(name='author')  # Ensure the group exists
             user.groups.add(group)
             return Response({"message": "User and Author registered successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -85,7 +85,7 @@ class ApprovalView(APIView):
 
     def post(self, request, submission_id):
         """
-        Approve a submission by its ID.
+        Approve a submission by its ID by setting its status to APPROVED.
         """
         try:
             # Fetch the submission by its ID
@@ -93,8 +93,27 @@ class ApprovalView(APIView):
         except Submission.DoesNotExist:
             return Response({"error": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Update the submission's approval status
-        submission.approved = True
+        # Update the submission's status to APPROVED
+        submission.status = SubmissionStatus.APPROVED
         submission.save()
 
         return Response({"message": "Submission approved successfully"}, status=status.HTTP_200_OK)
+    
+class DisapprovalView(APIView):
+    permission_classes = [IsAdminGroup]  # Apply the custom permission
+
+    def post(self, request, submission_id):
+        """
+        Disapprove a submission by its ID.
+        """
+        try:
+            # Fetch the submission by its ID
+            submission = Submission.objects.get(id=submission_id)
+        except Submission.DoesNotExist:
+            return Response({"error": "Submission not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Update the submission's status to DISAPPROVED
+        submission.status = SubmissionStatus.DISAPPROVED
+        submission.save()
+
+        return Response({"message": "Submission disapproved successfully"}, status=status.HTTP_200_OK)

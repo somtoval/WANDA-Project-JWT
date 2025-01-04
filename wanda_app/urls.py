@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterView, LoginView, LogoutView, SubmissionView,ApprovalView
+from .views import RegisterView, LoginView, LogoutView, SubmissionView,ApprovalView,DisapprovalView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('submissions/', SubmissionView.as_view(), name='submission-list-create'),
     path('submissions/<uuid:submission_id>/approve/', ApprovalView.as_view(), name='submission-approve'),
+    path('submissions/<uuid:submission_id>/disapprove/', DisapprovalView.as_view(), name='submission-disapprove'),
 ]
