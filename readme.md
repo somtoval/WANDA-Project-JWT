@@ -1,6 +1,6 @@
 # Thesis Submission System
 
-This is a web application designed for authors to submit their thesis for review. The system allows authors to sign up, sign in, and submit their thesis. Admin users can approve or reject the thesis submissions. The app provides basic authentication for authors and admin, allowing them to manage submissions.
+This is a web application designed for authors to submit their thesis for review. The system allows authors to sign up, sign in, and submit their thesis. Admin users can approve or reject the thesis submissions. The app provides JWT authentication for authors and admin, allowing them to manage submissions.
 
 ## Features
 
@@ -24,4 +24,4 @@ This is a web application designed for authors to submit their thesis for review
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/yourusername/thesis-submission-app.git
+   git clone https://github.com/somtoval/WANDA-Project-JWT.git
